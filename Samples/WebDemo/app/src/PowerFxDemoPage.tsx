@@ -14,10 +14,14 @@ import {
 import { sendDataAsync } from "./Helper";
 import { PowerFxLanguageClient } from "./PowerFxLanguageClient";
 
+interface ExpressionType {
+  $type: string;
+}
+
 interface PowerFxDemoPageState {
   context: string; // additional symbols passed in as a json object.
   expression: string; // the user's Power Fx expression to be evaluated
-  expressionType: string;
+  expressionType?: ExpressionType;
   evaluation: string; // the string-ified result of the evaluation.
   hasErrors: boolean;
 }
@@ -57,7 +61,7 @@ export default class PowerFxDemoPage extends React.Component<
     this.state = {
       context: JSON.stringify({ A: "ABC", B: { Inner: 123 } }),
       expression: "",
-      expressionType: "",
+      expressionType: undefined,
       evaluation: "",
       hasErrors: false,
     };
@@ -83,7 +87,7 @@ export default class PowerFxDemoPage extends React.Component<
           }}
         />
 
-        <h3>Formula {expressionType ? `(${expressionType})` : ""}</h3>
+        <h3>Formula {expressionType ? `(${expressionType.$type})` : ""}</h3>
         <PowerFxFormulaEditor
           getDocumentUriAsync={this._getDocumentUriAsync}
           defaultValue={""}
